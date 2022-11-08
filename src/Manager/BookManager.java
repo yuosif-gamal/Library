@@ -14,8 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 public class BookManager {
 
-    final Scanner input = new Scanner(System.in);
-
     public List<Book> allBooks() {
         List<Book> bookList = new ArrayList<Book>();
         try {
@@ -29,7 +27,6 @@ public class BookManager {
                 String category = rs.getString("category");
                 int rate = rs.getInt("rate");
                 String datePublish = rs.getString("dateofpublish");
-
                 Book book = new Book(title, id, AuthorID, category, rate , datePublish);
                 bookList.add(book);
             }
@@ -51,23 +48,13 @@ public class BookManager {
         return bookListSorted;
     }
 
-    public boolean updateBook(int ID) {
+    public boolean updateBook(Book book) {
         try {
+            int ID = book.getId();
             DatabaseConfg dbConf = new DatabaseConfg();
-
-            System.out.println(
-                    "please enter id of book , title , AuthorID , category of book  , rate of book , date of publish dd/mm/yy: ");
             PreparedStatement preparedStmt = dbConf.getConnect()
                     .prepareStatement("update book set" + " id = ? ," + " title = ?," + " dateofpublish = ? ,"
-                            + " rate = ? ," + "category = ? ," + "Author_id = ?" + " where ID = ?");
-            int id = input.nextInt();
-            String title = input.next();
-            int AuthorID = input.nextInt();
-            String category = input.next();
-            int rate = input.nextInt();
-            String datePublish = input.next();
-            Book book = new Book(title, id, AuthorID, category, rate ,  datePublish);
-
+                            + " rate = ? ," + "category = ? ," + "Author_id = ?" + " where id = ?");
             preparedStmt.setInt(1, book.getId());
             preparedStmt.setString(2, book.getTitle());
             preparedStmt.setString(3,  book.getdateOfPublish());
@@ -75,18 +62,10 @@ public class BookManager {
             preparedStmt.setString(5, book.getCategory());
             preparedStmt.setInt(6, book.getAuthorID());
             preparedStmt.setInt(7, ID);
-            int rowUpdate = preparedStmt.executeUpdate();
-            int it = 0;
-            for (Book b : allBooks()) {
-                if (b.getId() == ID) {
-                    allBooks().remove(it);
-                    allBooks().add(book);
-                }
-                it++;
-            }
+            preparedStmt.executeUpdate();
+
             System.out.println("updated");
 
-            return rowUpdate == 1;
         } catch (SQLException e) {
             System.out.println("not updated");
             System.err.println(e.getMessage());
@@ -94,20 +73,12 @@ public class BookManager {
         return false;
     }
 
-    public boolean addBook() {
+    public boolean addBook(Book book) {
         try {
             DatabaseConfg dbConf = new DatabaseConfg();
             PreparedStatement preparedStmt = dbConf.getConnect().prepareStatement(
                     "INSERT INTO book (id , title, dateofpublish,rate,category,Author_id) VALUES ( ?,?,?,?,?,?)");
-            System.out.println(
-                    "please enter id of book , title , AuthorID , category of book  , rate of book , date of publish dd/mm/yy: ");
-            int id = input.nextInt();
-            String title = input.next();
-            int AuthorID = input.nextInt();
-            String category = input.next();
-            int rate = input.nextInt();
-            String datePublish = input.next();
-            Book book = new Book(title, id, AuthorID, category, rate , datePublish);
+
 
             preparedStmt.setInt(1, book.getId());
             preparedStmt.setString(2, book.getTitle());
@@ -115,9 +86,8 @@ public class BookManager {
             preparedStmt.setInt(4, book.getRate());
             preparedStmt.setString(5, book.getCategory());
             preparedStmt.setInt(6, book.getAuthorID());
-            int rowUpdate = preparedStmt.executeUpdate();
+            preparedStmt.executeUpdate();
             allBooks().add(book);
-            return rowUpdate == 1;
         } catch (SQLException e) {
             System.out.println("Error");
             System.err.println(e.getMessage());
@@ -128,16 +98,9 @@ public class BookManager {
     public void deleteBookById(int Id) {
         try {
             DatabaseConfg dbConf = new DatabaseConfg();
-            PreparedStatement myStmt = dbConf.getConnect().prepareStatement("DELETE FROM book WHERE ID = ?");
-            myStmt.setLong(1, Id);
+            PreparedStatement myStmt = dbConf.getConnect().prepareStatement("DELETE FROM book WHERE id = ?");
+            myStmt.setInt(1, Id);
             myStmt.executeUpdate();
-            int it = 0;
-            for (Book b : allBooks()) {
-                if (b.getId() == Id) {
-                    allBooks().remove(it);
-                }
-                it++;
-            }
             System.out.println(" deleted ");
         } catch (SQLException e) {
             System.out.println("Not deleted ");
@@ -158,7 +121,6 @@ public class BookManager {
 
     public List<Book> searchBookBytitle(String bookTitle) {
         List<Book> myBook = new ArrayList<Book>();
-
         for (Book b : allBooks()) {
             if (b.getTitle().equals(bookTitle)) {
                 myBook.add(b);
@@ -184,7 +146,6 @@ public class BookManager {
             if (b.getAuthorID() == Authorid) {
                 sepicificAuthorBooks.add(b);
             }
-            else continue;
         }
         return sepicificAuthorBooks;
     }
