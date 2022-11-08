@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LanguageInjectionConfiguration">
+    <injection language="GitIgnore" injector-id="xml">
+      <display-name>groupId</display-name>
+      <single-file value="false" />
+      <place><![CDATA[xmlTag().withLocalName(string().equalTo("groupId")).withNamespace(string().equalTo("http://maven.apache.org/POM/4.0.0"))]]></place>
+    </injection>
+  </component>
+</project>

@@ -13,7 +13,8 @@ public class DatabaseConfg {
 
     public DatabaseConfg() throws SQLException {
         try {
-            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "pass");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "pass");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

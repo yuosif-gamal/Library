@@ -85,7 +85,7 @@ public class BookManager {
             preparedStmt.executeUpdate();
             allBooks().add(book);
         } catch (SQLException e) {
-            System.out.println("Error");
+            System.out.println("Errorooooooooooooo");
             System.err.println(e.getMessage());
         }
         return false;
