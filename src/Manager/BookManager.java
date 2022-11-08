@@ -1,17 +1,13 @@
 package Manager;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
 import Databaseconfg.DatabaseConfg;
 import Modules.Book;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 public class BookManager {
 
     public List<Book> allBooks() {
